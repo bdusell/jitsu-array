@@ -1268,12 +1268,56 @@ class ArrayUtil {
 	 * in the size of the array, its use should be avoided.
 	 *
 	 * @see \Jitsu\ArrayUtil::isSequential()
+	 *
+	 * @param mixed $array
+	 * @return bool
 	 */
 	public static function isAssociative($array) {
 		return is_array($array) && (
 			count($array) === 0 ||
 			!self::_isSequential($array)
 		);
+	}
+
+	/**
+	 * Efficiently guess whether a value is a sequential array.
+	 *
+	 * Guesses in constant time whether a value appears to be a sequential
+	 * array. This simply checks whether a value is an array whose first
+	 * key is 0 or an empty array.
+	 *
+	 * Mainly useful for implementing overloaded functions.
+	 *
+	 * @param mixed $array
+	 * @return bool
+	 */
+	public static function looksSequential($array) {
+		if(!is_array($array)) return false;
+		foreach($array as $k => $v) {
+			return $k === 0;
+		}
+		return true;
+	}
+
+	/**
+	 * Efficiently guess whether a value is an associative array.
+	 *
+	 * Guesses in constant time whether a value appears to be an
+	 * associative array. This simply checks whether the first key in the
+	 * array is not 0. Note that an empty array is considered both
+	 * sequential and associative.
+	 *
+	 * Mainly useful for implementing overloaded functions.
+	 *
+	 * @param mixed $array
+	 * @return bool
+	 */
+	public static function looksAssociative($array) {
+		if(!is_array($array)) return false;
+		foreach($array as $k => $v) {
+			return $k !== 0;
+		}
+		return true;
 	}
 
 	/**

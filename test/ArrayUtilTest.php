@@ -965,6 +965,24 @@ class ArrayUtilTest extends \PHPUnit_Framework_TestCase {
 		$this->eq(a::isAssociative([0 => 1, 2 => 2, 1 => 3]), true);
 	}
 
+	public function testLooksSequential() {
+		$this->eq(a::looksSequential([]), true);
+		$this->eq(a::looksSequential([1, 2, 3]), true);
+		$this->eq(a::looksSequential([0 => 'a', 'b' => 'c']), true);
+		$this->eq(a::looksSequential(['a' => 1, 'b' => 2]), false);
+		$this->eq(a::looksSequential([1 => 'b', 0 => 'a', 2 => 'c']), false);
+		$this->eq(a::looksSequential('hello world'), false);
+	}
+
+	public function testLooksAssociative() {
+		$this->eq(a::looksAssociative([]), true);
+		$this->eq(a::looksAssociative([1, 2, 3]), false);
+		$this->eq(a::looksAssociative(['a' => 1, 'b' => 2]), true);
+		$this->eq(a::looksAssociative([0 => 'a', 'b' => 'c']), false);
+		$this->eq(a::looksAssociative([1 => 'b', 0 => 'a', 2 => 'c']), true);
+		$this->eq(a::looksAssociative('hello world'), false);
+	}
+
 	public function testCountValues() {
 		$this->eq(a::countValues([1, 2, 2, 1, 1]), [1 => 3, 2 => 2]);
 		$this->eq(a::countValues([]), []);
