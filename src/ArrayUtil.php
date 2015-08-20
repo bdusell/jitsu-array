@@ -47,8 +47,6 @@ class ArrayUtil {
 	 * Retrieves the value stored under a key in an array, or a default
 	 * value if the key does not exist.
 	 *
-	 * @see \jitsu\ArrayUtil::hasKey() See for a note about integer keys.
-	 *
 	 * @param array $array
 	 * @param int|string $key
 	 * @param mixed $default
@@ -64,8 +62,6 @@ class ArrayUtil {
 	 * Gets a reference to the value stored under a key in an array. If the
 	 * key does not exist, inserts a default value at that key and returns
 	 * a reference to the new element.
-	 *
-	 * @see \jitsu\ArrayUtil::hasKey() See for a note about integer keys.
 	 *
 	 * @param array $array
 	 * @param int|string $key
@@ -149,38 +145,52 @@ class ArrayUtil {
 	}
 
 	/**
-	 * List the values in an array.
-	 *
-	 * When called with a list of keys, returns the values of the elements
-	 * with those keys, in the same order.
+	 * List the values in an array as a sequential array.
 	 *
 	 * @param array $array
-	 * @param (int|string)[]|null $keys
+	 * @return array
+	 */
+	public static function values($array) {
+		return array_values($array);
+	}
+
+	/**
+	 * Get the values in an array under a given list of keys, in like
+	 * order.
+	 *
+	 * @param array $array
+	 * @param (int|string)[] $keys
 	 * @param mixed $default Default value used for missing keys.
 	 * @return array
-	 * @throws \RuntimeException A key was missing and no default value was
-	 *                           provided.
 	 */
-	public static function values($array, $keys = null, $default = null) {
-		if($keys === null) {
-			return array_values($array);
-		} else {
-			$result = array();
-			if(func_num_args() > 2) {
-				foreach($keys as $key) {
-					$result[] = self::get($array, $key, $default);
-				}
-			} else {
-				foreach($keys as $key) {
-					if(array_key_exists($key, $array)) {
-						$result[] = $array[$key];
-					} else {
-						throw new \RuntimeException('missing key ' . $key);
-					}
-				}
-			}
-			return $result;
+	public static function listValues($array, $keys, $default = null) {
+		$result = array();
+		foreach($keys as $key) {
+			$result[] = self::get($array, $key, $default);
 		}
+		return $result;
+	}
+
+	/**
+	 * Get the values is an array under a given list of mandatory keys, in
+	 * like order.
+	 *
+	 * @param array $array
+	 * @param (int|string)[] $keys
+	 * @return array
+	 * @throws \RuntimeException Thrown if the array is missing any of the
+	 *                           given keys.
+	 */
+	public static function requireValues($array, $keys) {
+		$result = array();
+		foreach($keys as $key) {
+			if(array_key_exists($key, $array)) {
+				$result[] = $array[$key];
+			} else {
+				throw new \RuntimeException('missing key ' . $key);
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -594,27 +604,36 @@ class ArrayUtil {
 	 *
 	 * Returns all of the key-value pairs in an array with the listed keys.
 	 * The result is returned as an associative array whose ordering
-	 * reflects the ordering of the keys listed.
+	 * reflects the ordering of the keys listed. Keys which do not exist
+	 * are omitted.
 	 *
 	 * @param array $array
 	 * @param (int|string)[] $keys
-	 * @param mixed $default An optional default value to use as the value
-	 *                       for missing keys. If not given, missing keys
-	 *                       are omitted.
 	 * @return array
 	 */
-	public static function pick($array, $keys, $default = null) {
+	public static function pick($array, $keys) {
 		$result = array();
-		if(func_num_args() > 2) {
-			foreach($keys as $key) {
-				$result[$key] = self::get($array, $key, $default);
+		foreach($keys as $key) {
+			if(array_key_exists($key, $array)) {
+				$result[$key] = $array[$key];
 			}
-		} else {
-			foreach($keys as $key) {
-				if(array_key_exists($key, $array)) {
-					$result[$key] = $array[$key];
-				}
-			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Like `pick`, but use a default value for missing keys.
+	 *
+	 * @param array $array
+	 * @param (int|string)[] $keys
+	 * @param mixed $default The default value to use as the value for
+	 *                       missing keys.
+	 * @return array
+	 */
+	public static function getPick($array, $keys, $default = null) {
+		$result = array();
+		foreach($keys as $key) {
+			$result[$key] = self::get($array, $key, $default);
 		}
 		return $result;
 	}

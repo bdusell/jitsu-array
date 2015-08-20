@@ -31,11 +31,12 @@ class ArrayUtilTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGet() {
-		$a = ['a' => 1, 'b' => 2];
+		$a = ['a' => 1, 'b' => 2, 'c' => null];
 		$this->eq(a::get($a, 'a'), 1);
 		$this->eq(a::get($a, 'c'), null);
 		$this->eq(a::get($a, 'a', 42), 1);
 		$this->eq(a::get($a, 'd', 42), 42);
+		$this->eq(a::get($a, 'c', 42), null);
 	}
 
 	public function testGetRef() {
@@ -106,17 +107,17 @@ class ArrayUtilTest extends \PHPUnit_Framework_TestCase {
 		$assoc = ['a' => 1, 'b' => 2, 'c' => 3];
 		$this->eq(a::values($seq), [1, 2, 3]);
 		$this->eq(a::values($assoc), [1, 2, 3]);
-		$this->eq(a::values($assoc, ['a', 'c']), [1, 3]);
-		$this->eq(a::values($assoc, ['c', 'b', 'a']), [3, 2, 1]);
-		$this->eq(a::values($assoc, ['b', 'c', 'd'], null), [2, 3, null]);
-		$this->eq(a::values($assoc, ['b', 'c', 'd'], 123), [2, 3, 123]);
+		$this->eq(a::requireValues($assoc, ['a', 'c']), [1, 3]);
+		$this->eq(a::requireValues($assoc, ['c', 'b', 'a']), [3, 2, 1]);
+		$this->eq(a::listValues($assoc, ['b', 'c', 'd'], null), [2, 3, null]);
+		$this->eq(a::listValues($assoc, ['b', 'c', 'd'], 123), [2, 3, 123]);
 	}
 
 	/**
 	 * @expectedException RuntimeException
 	 */
 	public function testValuesMissing() {
-		a::values(['a' => 1, 'b' => 2], ['b', 'c', 'd']);
+		a::requireValues(['a' => 1, 'b' => 2], ['b', 'c', 'd']);
 	}
 
 	public function testAppend() {
@@ -382,7 +383,7 @@ class ArrayUtilTest extends \PHPUnit_Framework_TestCase {
 		$this->eq(a::pick($a, ['a', 'd']), ['a' => 1]);
 		$this->eq(a::pick($a, ['c', 'b']), ['c' => 3, 'b' => 2]);
 		$this->eq(a::pick($a, []), []);
-		$this->eq(a::pick($a, ['a', 'd'], null), ['a' => 1, 'd' => null]);
+		$this->eq(a::getPick($a, ['a', 'd'], null), ['a' => 1, 'd' => null]);
 	}
 
 	public function testInvert() {
