@@ -194,6 +194,30 @@ class ArrayUtil {
 	}
 
 	/**
+	 * Get the first element in a sequential array.
+	 *
+	 * Returns `null` if the array is empty.
+	 *
+	 * @param array $array
+	 * @return mixed|null
+	 */
+	public static function first($array) {
+		return $array ? $array[0] : null;
+	}
+
+	/**
+	 * Get the last element in a sequential array.
+	 *
+	 * Returns `null` if the array is empty.
+	 *
+	 * @param array $array
+	 * @return mixed|null
+	 */
+	public static function last($array) {
+		return $array ? $array[count($array) - 1] : null;
+	}
+
+	/**
 	 * Append a value to the end of a sequential array.
 	 *
 	 * Note that this is equivalent to the more succinct

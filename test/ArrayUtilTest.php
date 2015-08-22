@@ -120,6 +120,16 @@ class ArrayUtilTest extends \PHPUnit_Framework_TestCase {
 		a::requireValues(['a' => 1, 'b' => 2], ['b', 'c', 'd']);
 	}
 
+	public function testFirst() {
+		$this->eq(a::first([1, 2, 3]), 1);
+		$this->eq(a::first([]), null);
+	}
+
+	public function testLast() {
+		$this->eq(a::last([1, 2, 3]), 3);
+		$this->eq(a::last([]), null);
+	}
+
 	public function testAppend() {
 		$a = [1, 2, 3];
 		a::append($a, 4);
