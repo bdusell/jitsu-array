@@ -992,7 +992,7 @@ class ArrayUtil {
 	 * Get key-value pairs which exist in both of two arrays, where values
 	 * alone determine uniqueness.
 	 *
-	 * Returnis an associative array containing all key-value pairs in the
+	 * Returns an associative array containing all key-value pairs in the
 	 * first array whose values exist in the second. Uses string
 	 * comparison by default. Optionally provide a comparison function.
 	 *
