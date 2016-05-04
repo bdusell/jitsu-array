@@ -11,7 +11,11 @@ awkward interfaces.
 the standard PHP array functions while offering capabilities which are lacking
 in the built-in library.
 
+This package is part of [Jitsu](https://github.com/bdusell/jitsu).
+
 ## Installation
+
+Install this package with [Composer](https://getcomposer.org/):
 
 ```sh
 composer require jitsu/array
@@ -25,6 +29,10 @@ Run the unit test suite as follows:
 composer install
 ./vendor/bin/phpunit test/
 ```
+
+## Namespace
+
+The class is defined under the namespace `Jitsu`.
 
 ## API
 
